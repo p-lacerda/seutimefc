@@ -1,4 +1,4 @@
-import { Model, Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import db from '.';
 // import OtherModel from './OtherModel';
 
@@ -6,29 +6,27 @@ class Users extends Model {
   // public <campo>!: <tipo>;
 }
 
-const sequelize: any = Sequelize;
-
 Users.init({
   id: {
-    type: sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
   username: {
-    type: sequelize.VARCHAR(25),
+    type: DataTypes.STRING,
     allowNull: false,
   },
   role: {
-    type: sequelize.VARCHAR(10),
+    type: DataTypes.STRING,
     allowNull: false,
   },
   email: {
-    type: sequelize.VARCHAR(80),
+    type: DataTypes.STRING,
     allowNull: false,
   },
   password: {
-    type: sequelize.VARCHAR(25),
+    type: DataTypes.STRING,
     allowNull: false,
   },
 }, {

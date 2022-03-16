@@ -1,4 +1,4 @@
-import { Model, Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import db from '.';
 // import OtherModel from './OtherModel';
 
@@ -6,17 +6,15 @@ class Clubs extends Model {
   // public <campo>!: <tipo>;
 }
 
-const sequelize: any = Sequelize;
-
 Clubs.init({
   id: {
-    type: sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
   club_name: {
-    type: sequelize.STRING(25),
+    type: DataTypes.STRING,
     allowNull: false,
   },
 }, {

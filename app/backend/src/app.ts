@@ -6,6 +6,7 @@ class App {
 
   constructor() {
     // ...
+    this.app = express();
     this.config();
     // ...
   }
@@ -23,8 +24,14 @@ class App {
   }
 
   // ...
+  public login():void {
+    this.app.post('/login', []);
+  }
+
   public start(PORT: string | number):void {
-    this.app.listen(PORT);
+    this.app.listen(PORT, () => {
+      console.log(PORT);
+    });
   }
 }
 

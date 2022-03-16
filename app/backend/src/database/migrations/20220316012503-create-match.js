@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('matches', {
+    await queryInterface.createTable('matchs', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -25,20 +25,14 @@ module.exports = {
         allowNull: false,
       },
       in_progress: {
-        type: Sequelize.BOOL,
+        type: Sequelize.BOOLEAN,
         allowNull: false,
       },
     });
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('matches');
+  down: async (queryInterface, _Sequelize) => {
+    await queryInterface.dropTable('matchs');
     /**
      * Add reverting commands here.
      *

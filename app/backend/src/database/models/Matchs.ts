@@ -1,4 +1,4 @@
-import { Model, Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import db from '.';
 import OtherModel from './Clubs';
 
@@ -6,32 +6,30 @@ class Matchs extends Model {
   // public <campo>!: <tipo>;
 }
 
-const sequelize: any = Sequelize;
-
 Matchs.init({
   id: {
-    type: sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
   },
   home_team: {
-    type: sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   home_team_goals: {
-    type: sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   away_team: {
-    type: sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   away_team_goals: {
-    type: sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   in_progress: {
-    type: sequelize.BOOL,
+    type: DataTypes.BOOLEAN,
     allowNull: false,
   },
 }, {
