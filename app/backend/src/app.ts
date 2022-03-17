@@ -29,6 +29,7 @@ class App {
   }
 
   public start(PORT: string | number):void {
+    this.app.use(express.json());
     this.app.listen(PORT, () => {
       console.log(PORT);
     });
