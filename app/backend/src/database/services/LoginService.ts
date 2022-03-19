@@ -1,22 +1,15 @@
 import Users from '../models/Users';
+import { createToken } from '../../auth/index';
+import { IUser } from '../interfaces/User';
 
 class LoginService {
-  static async userLogin(email: string, password: string) {
-    const users = await Users.create({
-      email,
-      password,
-    });
+  static async userLogin(email: string, password: string): Promise<IUser> {
+    const users: any = await Users.findOne({ where: { email, password } });
 
-    console.log(users, 'USERS--------------------------------------------------------');
-
+    const token: string = createToken(await users);
     return {
-      user: {
-        // id: '1',
-        username: 'Admin',
-        role: 'admin',
-        email,
-      },
-      token: '123.456.789', // Aqui deve ser o token gerado pelo backend.
+      users,
+      token,
     };
   }
 }

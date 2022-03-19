@@ -4,6 +4,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Users from '../database/models/Users';
+import { ADMIN_USER } from './mock';
 // import { createLogin } from '../database/controllers/LoginController';
 
 import { Response } from 'superagent';
@@ -16,29 +17,50 @@ describe('Testa a criação de um novo login no model Users com o Controller cre
   /**
    * Exemplo do uso de stubs com tipos
    */
-  let chaiHttpResponse: Response;
+  let chaiResponse: Response;
 
-  // before(async () => {
-  //   sinon
-  //     .stub(Users, "create")
-  //     .resolves({
-  //       Users<Seu mock>
-  //     } as Users);
-  // });
+  before(async () => {
+    sinon
+      .stub(Users, "findOne")
+      .resolves(ADMIN_USER as any);
+  });
 
   after(()=>{
-    (Users.create as sinon.SinonStub).restore();
+    (Users.findOne as sinon.SinonStub).restore();
   })
 
   it('should return http status request 200', async () => {
-    chaiHttpResponse = await chai
+    chaiResponse = await chai
        .request(app)
-       .get('/login')
+       .post('/login')
+       .send({
+          email: ADMIN_USER.email,
+          password: ADMIN_USER.password,
+       })
 
-    expect(chaiHttpResponse).to.be.eq('200');
+    expect(chaiResponse).to.have.status(200);
   });
 
-  it('Seu sub-teste', () => {
-    expect(false).to.be.eq(true);
+  it('should return the correct user', async () => {
+    chaiResponse = await chai
+       .request(app)
+       .post('/login')
+       .send({
+          email: ADMIN_USER.email,
+          password: ADMIN_USER.password,
+       })
+
+    expect(chaiResponse.body.users).to.have.property('email').to.contains(ADMIN_USER.email);
+  });
+
+  it('should return httpStatus 401 if email is empty', async () => {
+    chaiResponse = await chai
+       .request(app)
+       .post('/login')
+       .send({
+          password: ADMIN_USER.password,
+       })
+
+    expect(chaiResponse).to.have.status(401);
   });
 });

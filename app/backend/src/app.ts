@@ -13,6 +13,11 @@ class App {
     // ...
     this.app = express();
     this.config();
+    // support application/json type post data
+    this.app.use(bodyParser.json());
+    // support application/x-www-form-urlencoded post data
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(express.json());
     this.loginRouter.routes(this.app);
     // ...
   }
@@ -35,12 +40,6 @@ class App {
   // }
 
   public start(PORT: string | number):void {
-    // support application/json type post data
-    this.app.use(bodyParser.json());
-    // support application/x-www-form-urlencoded post data
-    this.app.use(bodyParser.urlencoded({ extended: false }));
-
-    this.app.use(express.json());
     this.app.listen(PORT, () => {
       console.log(PORT);
     });

@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-// import LoginService from '../services/LoginService';
+import LoginService from '../services/LoginService';
 
 class LoginController {
   // Não acessa nenhum atributo do objeto
-  static userLogin(req: Request, res: Response) {
-    // const { email, password } = req.body;
+  static async userLogin(req: Request, res: Response) {
+    const { email, password } = req.body;
 
-    // const users = await LoginService.userLogin(email, password);
+    const users = await LoginService.userLogin(email, password);
 
-    return res.status(200).send('Está tudo bem!');
+    return res.status(200).json(users);
   }
 }
 

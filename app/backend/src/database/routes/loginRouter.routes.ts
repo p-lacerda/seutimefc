@@ -1,5 +1,6 @@
 // import { Router } from 'express';
 import LoginController from '../controllers/LoginController';
+import { isEmailValid, isPasswordValid } from '../middlewares/LoginErrors';
 // import userLogin from '../controllers/LoginController';
 
 // const router: Router = Router();
@@ -17,7 +18,7 @@ class LoginRoutes {
     console.log(this.value);
     app
       .route('/login')
-      .post(LoginController.userLogin);
+      .post([isEmailValid, isPasswordValid, LoginController.userLogin]);
   }
 }
 
