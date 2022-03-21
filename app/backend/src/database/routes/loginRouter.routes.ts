@@ -19,6 +19,9 @@ class LoginRoutes {
     app
       .route('/login')
       .post([isEmailValid, isPasswordValid, LoginController.userLogin]);
+    app
+      .route('/login/validate')
+      .get(LoginController.userVerify);
   }
 }
 

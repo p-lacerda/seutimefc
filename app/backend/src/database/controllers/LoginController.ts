@@ -8,17 +8,25 @@ class LoginController {
 
     const users = await LoginService.userLogin(email, password);
 
-    return res.status(200).json(users);
+    const { httpCode, message } = users;
+
+    if (httpCode === 401) {
+      return res.status(httpCode).json({ message });
+    }
+
+    return res.status(httpCode).json(message);
+  }
+
+  static async userVerify(req: Request, res: Response) {
+    const token: string | any = req.headers.authorization;
+
+    const user = await LoginService.userVerify(token);
+
+    const { httpCode, message } = user;
+
+    return res.status(httpCode).json(message);
   }
 }
-
-// function userLogin(req: Request, res: Response) {
-//   // const { email, password } = req.body;
-
-//   // const users = await LoginService.userLogin(email, password);
-
-//   return res.status(200).send('Está tudo bem!');
-// }
 
 // export default userLogin;
 export default LoginController;
