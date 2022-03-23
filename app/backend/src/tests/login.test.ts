@@ -4,8 +4,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Users from '../database/models/Users';
-import { ADMIN_USER, WRONG_ADMIN_USER } from './mock';
-// import { createLogin } from '../database/controllers/LoginController';
+import { CORRECT_ADMIN_USER, ADMIN_USER, WRONG_ADMIN_USER } from './mock';
 
 import { Response } from 'superagent';
 
@@ -34,8 +33,8 @@ describe('Testa a criação de um novo login na rota /login', () => {
        .request(app)
        .post('/login')
        .send({
-          email: ADMIN_USER.user.email,
-          password: ADMIN_USER.user.password,
+          email: CORRECT_ADMIN_USER.email,
+          password: CORRECT_ADMIN_USER.password,
        })
 
     expect(chaiResponse).to.have.status(200);
@@ -46,11 +45,11 @@ describe('Testa a criação de um novo login na rota /login', () => {
        .request(app)
        .post('/login')
        .send({
-          email: ADMIN_USER.user.email,
-          password: ADMIN_USER.user.password,
+          email: CORRECT_ADMIN_USER.email,
+          password: CORRECT_ADMIN_USER.password,
        })
 
-    expect(chaiResponse.body.user).to.have.property('email').to.contains(ADMIN_USER.user.email);
+    expect(chaiResponse.body.user).to.have.property('email').to.contains(ADMIN_USER.email);
   });
 
   it('should return httpStatus 401 if email is empty', async () => {
@@ -58,7 +57,7 @@ describe('Testa a criação de um novo login na rota /login', () => {
        .request(app)
        .post('/login')
        .send({
-          password: ADMIN_USER.user.password,
+          password: CORRECT_ADMIN_USER.password,
        })
 
     expect(chaiResponse).to.have.status(401);
@@ -69,11 +68,11 @@ describe('Testa a criação de um novo login na rota /login', () => {
     .request(app)
     .post('/login')
     .send({
-       email: ADMIN_USER.user.email,
-       password: ADMIN_USER.user.password,
+       email: CORRECT_ADMIN_USER.email,
+       password: CORRECT_ADMIN_USER.password,
     })
 
-    expect(chaiResponse).to.not.have.property('password');
+    expect(chaiResponse.body.user).to.not.have.property('password');
   });
 
   it('should return httpStatus 401 if password is wrong', async () => {
@@ -86,19 +85,6 @@ describe('Testa a criação de um novo login na rota /login', () => {
     })
 
     expect(chaiResponse).to.have.status(401);
-  });
-
-  it('should return a token', async () => {
-    chaiResponse = await chai
-    .request(app)
-    .post('/login')
-    .send({
-       email: ADMIN_USER.user.email,
-       password: ADMIN_USER.user.password,
-    })
-
-    expect(chaiResponse.body).to.have.a.property('token');
-    expect(chaiResponse.body.token)
   });
 });
 
@@ -115,25 +101,25 @@ describe('Testa a validação de um usuário na rota /login/validate', () => {
     (Users.findOne as sinon.SinonStub).restore();
   })
 
-  it('should return user status in the /login', async () => {
+  it('should return user role in the /login', async () => {
     chaiResponse = await chai
        .request(app)
        .post('/login')
        .send({
-          email: ADMIN_USER.user.email,
-          password: ADMIN_USER.user.password,
+          email: CORRECT_ADMIN_USER.email,
+          password: CORRECT_ADMIN_USER.password,
        })
 
-    expect(chaiResponse).to.have.property('status').to.contains('admin');
+    expect(chaiResponse.body.user).to.have.property('role').to.be.eq('admin');
   });
 
-  it('should return user status in the /login/validate', async () => {
+  it('should return user role in the /login/validate', async () => {
     const login = await chai
       .request(app)
       .post('/login')
       .send({
-        email: ADMIN_USER.user.email,
-        password: ADMIN_USER.user.password,
+        email: CORRECT_ADMIN_USER.email,
+        password: CORRECT_ADMIN_USER.password,
       })
 
       const chaiResponse = await chai

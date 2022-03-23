@@ -15,9 +15,10 @@ Clubs.init({
     allowNull: false,
     primaryKey: true,
   },
-  club_name: {
+  clubName: {
     type: sequelize.STRING,
     allowNull: false,
+    field: 'club_name',
   },
 }, {
   // ... Outras configs

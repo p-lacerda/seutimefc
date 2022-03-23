@@ -1,12 +1,12 @@
 import * as express from 'express';
 import bodyParser = require('body-parser');
 
-import LoginRoutes from './database/routes/loginRouter.routes';
+import Routes from './database/routes/loginRouter.routes';
 
 class App {
   public app: express.Express;
 
-  public loginRouter: LoginRoutes = new LoginRoutes();
+  public Router: Routes = new Routes();
   // ...
 
   constructor() {
@@ -18,7 +18,7 @@ class App {
     // support application/x-www-form-urlencoded post data
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(express.json());
-    this.loginRouter.routes(this.app);
+    this.Router.routes(this.app);
     // ...
   }
 

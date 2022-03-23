@@ -1,5 +1,6 @@
 // import { Router } from 'express';
 import LoginController from '../controllers/LoginController';
+import ClubsController from '../controllers/ClubsController';
 import { isEmailValid, isPasswordValid } from '../middlewares/LoginErrors';
 // import userLogin from '../controllers/LoginController';
 
@@ -9,10 +10,12 @@ import { isEmailValid, isPasswordValid } from '../middlewares/LoginErrors';
 
 // export default router;
 
-class LoginRoutes {
+class Routes {
   private value: string;
 
   public LoginController: LoginController = new LoginController();
+
+  public ClubsController: ClubsController = new ClubsController();
 
   public routes(app: any): void {
     console.log(this.value);
@@ -22,7 +25,13 @@ class LoginRoutes {
     app
       .route('/login/validate')
       .get(LoginController.userVerify);
+    app
+      .route('/clubs')
+      .get(ClubsController.getAll);
+    app
+      .route('/clubs/:id')
+      .get(ClubsController.getById);
   }
 }
 
-export default LoginRoutes;
+export default Routes;

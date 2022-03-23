@@ -9,9 +9,10 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      club_name: {
+      clubName: {
         type: Sequelize.STRING,
         allowNull: false,
+        field: 'club_name',
       },
     });
   },
