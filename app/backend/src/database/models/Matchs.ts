@@ -1,6 +1,6 @@
 import { Model, Sequelize } from 'sequelize';
 import db from '.';
-import OtherModel from './Clubs';
+import Clubs from './Clubs';
 
 class Matchs extends Model {
   // public <campo>!: <tipo>;
@@ -12,27 +12,41 @@ Matchs.init({
   id: {
     type: sequelize.INTEGER,
     allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
   },
-  home_team: {
+  homeTeam: {
     type: sequelize.INTEGER,
     allowNull: false,
+    field: 'home_team',
+    references: {
+      model: 'clubs',
+      key: 'id',
+    },
   },
-  home_team_goals: {
+  homeTeamGoals: {
     type: sequelize.INTEGER,
     allowNull: false,
+    field: 'home_team_goals',
   },
-  away_team: {
+  awayTeam: {
     type: sequelize.INTEGER,
     allowNull: false,
+    field: 'away_team',
+    references: {
+      model: 'clubs',
+      key: 'id',
+    },
   },
-  away_team_goals: {
+  awayTeamGoals: {
     type: sequelize.INTEGER,
     allowNull: false,
+    field: 'away_team_goals',
   },
-  in_progress: {
+  inProgress: {
     type: sequelize.BOOLEAN,
     allowNull: false,
+    field: 'in_progress',
   },
 }, {
   // ... Outras configs
@@ -47,10 +61,12 @@ Matchs.init({
   * Associations 1:N devem ficar em uma das instâncias de modelo
   * */
 
-OtherModel.belongsTo(Matchs, { foreignKey: 'id', as: 'id' });
+Matchs.belongsTo(Clubs, { foreignKey: 'home_team', as: 'homeClub' });
+Matchs.belongsTo(Clubs, { foreignKey: 'away_team', as: 'awayClub' });
 // OtherModel.belongsTo(Matchs, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
 
-Matchs.hasMany(OtherModel, { foreignKey: 'id', as: 'id' });
+Clubs.hasMany(Matchs, { foreignKey: 'home_team', as: 'matchHome' });
+Clubs.hasMany(Matchs, { foreignKey: 'away_team', as: 'matchAway' });
 // Matchs.hasMany(OtherModel, { foreignKey: 'campoD', as: 'campoEstrangeiroD' });
 
 export default Matchs;

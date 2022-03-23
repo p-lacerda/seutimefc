@@ -80,4 +80,3 @@ describe("Testa o retorno da rota /clubs/:id", () => {
     expect(chaiResponse.body).to.be.deep.equal(CLUBS_ID);
   });
 });
-

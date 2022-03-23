@@ -14,6 +14,7 @@ Clubs.init({
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
+    references: { model: 'matchs' },
   },
   clubName: {
     type: sequelize.STRING,

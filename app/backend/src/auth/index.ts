@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import jwt = require('jsonwebtoken');
 import fs = require('fs/promises');
 import bcrypt = require('bcryptjs');
@@ -28,4 +29,25 @@ const validationToken = async (token: string) => {
   }
 };
 
-export { createToken, decryptPassword, validationToken };
+const authVerificationToken = async (req: Request, res: Response, next: NextFunction) => {
+  const token: any = req.headers.authorization;
+  const SECRET_KEY: string = await fs.readFile(`${__dirname}/../../jwt.evaluation.key`, 'utf-8');
+
+  if (!token) {
+    return res.status(401).json({ message: 'Token not found' });
+  }
+
+  try {
+    const decoded: any = jwt.verify(token, SECRET_KEY);
+
+    if (!decoded) {
+      return res.status(401).json({ message: 'Invalid Token' });
+    }
+
+    next();
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export { createToken, decryptPassword, validationToken, authVerificationToken };
