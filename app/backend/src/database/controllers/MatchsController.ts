@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { MatchsCreated } from '../interfaces/Matchs';
 import MatchsService from '../services/MatchsService';
 
 class MatchsController {
@@ -15,21 +16,49 @@ class MatchsController {
       matchs = await MatchsService.getAll();
     }
 
-    return res.status(200).json(matchs);
+    res.status(200).json(matchs);
   }
 
   static async create(req:Request, res:Response) {
-    const { body } = req;
-    const match = await MatchsService.create(body);
-    return res.status(200).json(match);
+    const {
+      homeTeam, awayTeam, inProgress, awayTeamGoals, homeTeamGoals,
+    } = req.body;
+
+    if (homeTeam === awayTeam) {
+      return res.status(401).json({
+        message: 'It is not possible to create a match with two equal teams' });
+    }
+
+    const userMatchReceived = {
+      homeTeam,
+      awayTeam,
+      homeTeamGoals,
+      awayTeamGoals,
+      inProgress: inProgress === undefined ? true : inProgress,
+    };
+
+    const match: MatchsCreated = await MatchsService.create(userMatchReceived);
+    res.status(201).json(match);
   }
 
   static async createFinishedMatch(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
-    const { body } = req;
-    const match = await MatchsService.createFinishedMatch(body, Number(id));
+    const match = await MatchsService.createFinishedMatch(Number(id));
 
     res.status(200).json(match);
+  }
+
+  static async edit(req: Request, res: Response) {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+
+    const userMatchReceived = {
+      homeTeamGoals, awayTeamGoals,
+    };
+
+    const editedMatch = await MatchsService.edit(Number(id), userMatchReceived);
+
+    res.status(200).json(editedMatch);
   }
 }
 

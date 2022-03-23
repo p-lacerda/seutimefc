@@ -2,25 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import ClubsService from '../services/ClubsService';
 import MatchsService from '../services/MatchsService';
 
-const isTeamDuplicated = (req: Request, res: Response, next: NextFunction) => {
-  const { homeTeam, awayTeam } = req.body;
-  if (homeTeam === awayTeam) {
-    return res.status(401).json({
-      message: 'It is not possible to create a match with two equal teams' });
-  }
-  next();
-};
-
-const isInProgress = (req: Request, res: Response, next: NextFunction) => {
-  const { inProgress } = req.body;
-
-  if (inProgress === false) {
-    return res.status(401).json({ message: 'It is not possible create a finished match' });
-  }
-
-  next();
-};
-
 const isAValidTeam = async (req: Request, res: Response, next: NextFunction) => {
   const { homeTeam, awayTeam } = req.body;
 
@@ -30,7 +11,7 @@ const isAValidTeam = async (req: Request, res: Response, next: NextFunction) => 
     club.id === Number(team));
 
   if (isClubsExists(homeTeam) === false
-    || isClubsExists(awayTeam) === false || homeTeam === null || awayTeam === null) {
+    || isClubsExists(awayTeam) === false || homeTeam === undefined || awayTeam === undefined) {
     return res.status(401).json({ message: 'There is no team with such id!' });
   }
 
@@ -52,4 +33,4 @@ const isTheIdExists = async (req: Request, res: Response, next: NextFunction) =>
   next();
 };
 
-export { isTeamDuplicated, isAValidTeam, isInProgress, isTheIdExists };
+export { isAValidTeam, isTheIdExists };

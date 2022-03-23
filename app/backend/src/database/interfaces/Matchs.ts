@@ -2,4 +2,13 @@ interface InProgress {
   inProgress: string,
 }
 
-export default InProgress;
+interface MatchsCreated {
+  id: number,
+  homeTeam: number,
+  awayTeam: number,
+  homeTeamGoals: number,
+  awayTeamGoals: number,
+  inProgress: boolean
+}
+
+export { InProgress, MatchsCreated };

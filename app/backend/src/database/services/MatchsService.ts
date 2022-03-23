@@ -36,22 +36,45 @@ class MatchsService {
     return matchs;
   }
 
-  static async create(data: any): Promise<any> {
-    const match = await Matchs.create(data);
+  static async create(userMatchReceived: any): Promise<any> {
+    const match = await Matchs.create(userMatchReceived);
     return match;
   }
 
-  static async createFinishedMatch(content: any, id: number): Promise<any> {
-    await Matchs.update(
-      {
-        content,
-      },
-      {
-        where: { id },
-      },
-    );
+  static async createFinishedMatch(id: number): Promise<any> {
+    await Matchs.update({ inProgress: false }, { where: { id } });
 
-    const updatedMatch = await Matchs.findByPk(id);
+    const updatedMatch = await Matchs.findByPk(id, {
+      attributes: { exclude: ['home_team', 'away_team'] },
+      include: [
+        { model: Clubs,
+          as: 'awayClub',
+          attributes: ['clubName'] },
+        { model: Clubs,
+          as: 'homeClub',
+          attributes: ['clubName'] },
+      ],
+    });
+
+    return updatedMatch;
+  }
+
+  static async edit(id: number, body: any) {
+    await Matchs.update({
+      ...body,
+    }, { where: { id } });
+
+    const updatedMatch = await Matchs.findByPk(id, {
+      attributes: { exclude: ['home_team', 'away_team'] },
+      include: [
+        { model: Clubs,
+          as: 'awayClub',
+          attributes: ['clubName'] },
+        { model: Clubs,
+          as: 'homeClub',
+          attributes: ['clubName'] },
+      ],
+    });
 
     return updatedMatch;
   }

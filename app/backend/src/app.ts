@@ -1,5 +1,5 @@
 import * as express from 'express';
-import cors = require('cors');
+import * as cors from 'cors';
 import bodyParser = require('body-parser');
 
 import Routes from './routes/loginRouter.routes';
@@ -27,7 +27,7 @@ class App {
   private config():void {
     const accessControl: express.RequestHandler = (_req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS,PUT');
+      res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS,PUT');
       res.header('Access-Control-Allow-Headers', '*');
       next();
     };

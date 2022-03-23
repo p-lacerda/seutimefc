@@ -46,7 +46,10 @@ const authVerificationToken = async (req: Request, res: Response, next: NextFunc
 
     next();
   } catch (err: any) {
-    throw new Error(err);
+    if (err.message === 'invalid token' || err.message === 'jwt malformed') {
+      return res.status(401).json({ message: 'Expired or invalid token' });
+    }
+    return res.status(401).json({ message: err.message });
   }
 };
 
