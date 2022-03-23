@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Matchs from '../services/MatchsService';
+import MatchsService from '../services/MatchsService';
 
 class MatchsController {
   static async getAll(req: Request, res: Response) {
@@ -8,11 +8,11 @@ class MatchsController {
 
     if (query) {
       const stringToBoolean = (query.inProgress === 'true');
-      matchs = await Matchs.getAllByParams(stringToBoolean);
+      matchs = await MatchsService.getAllByParams(stringToBoolean);
     }
 
     if (Object.values(query).length === 0) {
-      matchs = await Matchs.getAll();
+      matchs = await MatchsService.getAll();
     }
 
     return res.status(200).json(matchs);
@@ -20,8 +20,16 @@ class MatchsController {
 
   static async create(req:Request, res:Response) {
     const { body } = req;
-    const match = await Matchs.create(body);
+    const match = await MatchsService.create(body);
     return res.status(200).json(match);
+  }
+
+  static async createFinishedMatch(req: Request, res: Response): Promise<any> {
+    const { id } = req.params;
+    const { body } = req;
+    const match = await MatchsService.createFinishedMatch(body, Number(id));
+
+    res.status(200).json(match);
   }
 }
 

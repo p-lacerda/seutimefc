@@ -40,6 +40,21 @@ class MatchsService {
     const match = await Matchs.create(data);
     return match;
   }
+
+  static async createFinishedMatch(content: any, id: number): Promise<any> {
+    await Matchs.update(
+      {
+        content,
+      },
+      {
+        where: { id },
+      },
+    );
+
+    const updatedMatch = await Matchs.findByPk(id);
+
+    return updatedMatch;
+  }
 }
 
 export default MatchsService;

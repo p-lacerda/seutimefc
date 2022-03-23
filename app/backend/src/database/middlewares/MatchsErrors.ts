@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import ClubsService from '../services/ClubsService';
+import MatchsService from '../services/MatchsService';
 
 const isTeamDuplicated = (req: Request, res: Response, next: NextFunction) => {
   const { homeTeam, awayTeam } = req.body;
@@ -36,4 +37,19 @@ const isAValidTeam = async (req: Request, res: Response, next: NextFunction) => 
   next();
 };
 
-export { isTeamDuplicated, isAValidTeam, isInProgress };
+const isTheIdExists = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  const matchs = await MatchsService.getAll();
+
+  const isMatchExists = matchs.some((match: any) =>
+    match.id === Number(id));
+
+  if (id === null || isMatchExists === false) {
+    return res.status(401).json({ message: 'There is no match with such id!' });
+  }
+
+  next();
+};
+
+export { isTeamDuplicated, isAValidTeam, isInProgress, isTheIdExists };

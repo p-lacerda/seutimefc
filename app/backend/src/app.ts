@@ -1,7 +1,8 @@
 import * as express from 'express';
+import cors = require('cors');
 import bodyParser = require('body-parser');
 
-import Routes from './database/routes/loginRouter.routes';
+import Routes from './routes/loginRouter.routes';
 
 class App {
   public app: express.Express;
@@ -13,6 +14,7 @@ class App {
     // ...
     this.app = express();
     this.config();
+    this.app.use(cors());
     // support application/json type post data
     this.app.use(bodyParser.json());
     // support application/x-www-form-urlencoded post data
@@ -25,7 +27,7 @@ class App {
   private config():void {
     const accessControl: express.RequestHandler = (_req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS,PUT');
+      res.header('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS,PUT');
       res.header('Access-Control-Allow-Headers', '*');
       next();
     };
@@ -33,11 +35,6 @@ class App {
     this.app.use(accessControl);
     // ...
   }
-
-  // ...
-  // public loadRoutes():void {
-  // this.app.use('/login', loginRouter);
-  // }
 
   public start(PORT: string | number):void {
     this.app.listen(PORT, () => {
